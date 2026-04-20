@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elecciones Gobernadores Mexico 2027</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 2rem 1rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 1.5rem; }
+  .filters { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .filters input, .filters select {
+    font-size: 13px; height: 34px; padding: 0 10px;
+    border: 1px solid #ccc; border-radius: 6px;
+    background: #fff; color: #1a1a1a;
+  }
+  .filters input { flex: 1; min-width: 200px; }
+  .count { font-size: 12px; color: #888; margin-bottom: 8px; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid #ddd; border-radius: 10px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; table-layout: fixed; }
+  thead th {
+    background: #f0eeea; padding: 9px 10px; text-align: left;
+    font-size: 11px; font-weight: 600; color: #555;
+    text-transform: uppercase; letter-spacing: .5px;
+    border-bottom: 1px solid #ddd;
+  }
+  tbody tr { border-bottom: 1px solid #eee; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover td { background: #fafaf8; }
+  td { padding: 9px 10px; vertical-align: top; }
+  .badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; white-space: nowrap; margin: 1px 2px 1px 0;
+  }
+  .b-morena { background: #8B1A1A; color: #ffd0d0; }
+  .b-pan    { background: #0057A0; color: #c8dfff; }
+  .b-pri    { background: #006847; color: #c0f0d4; }
+  .b-pvem   { background: #2d8a2d; color: #d0f5d0; }
+  .b-mc     { background: #F26522; color: #fff5e0; }
+  .b-pt     { background: #CC0000; color: #ffe0e0; }
+  .b-nva    { background: #555;    color: #eee;    }
+  .asp-lead   { font-weight: 600; color: #1a1a1a; }
+  .asp-others { color: #666; font-size: 11.5px; }
+  .asp-nota   { color: #999; font-size: 11px; font-style: italic; }
+  .col-estado    { width: 13%; }
+  .col-gob       { width: 18%; }
+  .col-partactual{ width: 9%;  }
+  .col-partidos  { width: 21%; }
+  .col-asp       { width: 39%; }
+  .footer { font-size: 11px; color: #aaa; margin-top: 12px; text-align: right; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Elecciones de Gobernadores — Mexico 2027</h1>
+  <p class="subtitle">Jornada electoral: 6 de junio de 2027 &nbsp;|&nbsp; 17 gubernaturas en disputa &nbsp;|&nbsp; Aspirantes internos Morena actualizados a abril 2026</p>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Buscar estado o candidato...">
+    <select id="filtPartido">
+      <option value="">Todos los partidos actuales</option>
+      <option value="Morena">Morena</option>
+      <option value="PAN">PAN</option>
+      <option value="PVEM">PVEM</option>
+      <option value="MC">MC</option>
+    </select>
+  </div>
+  <div class="count" id="count">Mostrando 17 estados</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-estado">Estado</th>
+          <th class="col-gob">Gobernador actual</th>
+          <th class="col-partactual">Partido</th>
+          <th class="col-partidos">Partidos en contienda</th>
+          <th class="col-asp">Aspirantes Morena (internos)</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="footer">Fuentes: Milenio, La Jornada, El Financiero, Campaigns &amp; Elections MX &mdash; Rubikon Intel 2026</p>
+</div>
+
+<script>
+const data = [
+  { estado:"Aguascalientes", gob:"Maria Teresa Jimenez Esquivel", partido:"PAN", partidos:["PAN","PRI","Morena","MC"], lead:"Arturo Avila", otros:["Nora Ruvalcaba (sen.)","Aldo Ruiz Sanchez"], nota:"Estado historicamente panista; Morena acorta distancia" },
+  { estado:"Baja California", gob:"Marina del Pilar Avila", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Julieta Ramirez (sen.) / Ismael Burgueño", otros:["Karla Rueda"], nota:"Oposicion practicamente desaparecida; conflicto interno Morena" },
+  { estado:"Baja California Sur", gob:"Victor Manuel Castro Cosio", partido:"Morena", partidos:["Morena","PT","PVEM","PAN"], lead:"Milena Quiroga (pdte. mpal. La Paz)", otros:["Homero Davis (sen.)","Lucia Trasviña (sen.)","Christian Agundez"], nota:"Disputa abierta gobernador vs. senador" },
+  { estado:"Campeche", gob:"Layda Sansores", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Pablo Gutierrez Lazarus / Elisa Maria Hernandez", otros:["Otros perfiles por definir"], nota:"Sansores tendra influencia en la sucesion; foco rojo por gestion" },
+  { estado:"Chihuahua", gob:"Maria Eugenia Campos (Maru)", partido:"PAN", partidos:["PAN","PRI","Morena","MC"], lead:"Andrea Chavez (sen., licencia pedida)", otros:["Cruz Perez Cuellar (pdte. mpal. Cd. Juarez)"], nota:"Confrontacion publica Chavez vs. Perez Cuellar; PAN debilitado" },
+  { estado:"Colima", gob:"Indira Vizcaino", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Rosi Bayardo", otros:["Otros perfiles en evaluacion"], nota:"Estado de Morena con amplia ventaja" },
+  { estado:"Guerrero", gob:"Evelyn Salgado", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Beatriz Mojica (sen.)", otros:["Esthela Damian (consejera juridica Presidencia)","Felix Salgado Macedonio (sen., descartado nepotismo)","Otros 12+ aspirantes"], nota:"Mas disputado internamente; Felix descartado por nepotismo" },
+  { estado:"Michoacan", gob:"Alfredo Ramirez Bedolla", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Raul Moron (sen.)", otros:["Grecia Quiroz (pdte. mpal. Uruapan)","Fabiola Alanis (dip. local)"], nota:"Conflicto gobernador vs. Moron; 'Movimiento del Sombrero' en juego" },
+  { estado:"Nayarit", gob:"Miguel Angel Navarro", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Hector Santana (pdte. mpal. Bahia de Banderas)", otros:["Pavel Jarero (sen.)","Geraldine Ponce (pdte. mpal. Tepic)"], nota:"Alcaldes rebasan a senadores en preferencias" },
+  { estado:"Nuevo Leon", gob:"Samuel Garcia", partido:"MC", partidos:["MC","Morena","PT","PVEM","PAN","PRI"], lead:"Andres Mijes (pdte. mpal. Escobedo)", otros:["Waldo Fernandez (sen.)","Tatiana Clouthier","Clara Luz Flores"], nota:"MC busca retenerlo; posible candidatura de Luis D. Colosio" },
+  { estado:"Queretaro", gob:"Mauricio Kuri", partido:"PAN", partidos:["PAN","PRI","Morena","MC"], lead:"Santiago Nieto (ex-titular UIF)", otros:["Beatriz Robles (sen.)","Gilberto Herrera (dip. fed.)","Luis Humberto Fernandez"], nota:"Estado panista historico; Morena recorta diferencia gradualmente" },
+  { estado:"Quintana Roo", gob:"Mara Lezama", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Gino Segura / Eugenio Segura (sen.)", otros:["Ana Patricia Peralta (pdte. mpal. Benito Juarez)","Anahi Gonzalez (sen.)","Rafael Marin (dip.)"], nota:"Morena dominante; disputa interna entre varios perfiles" },
+  { estado:"San Luis Potosi", gob:"Ricardo Gallardo", partido:"PVEM", partidos:["PVEM","Morena","PT","PAN","PRI"], lead:"Rosa Icela Rodriguez (sec. de Gobernacion)", otros:["Ruth Gonzalez (sen. PVEM, posible por su partido)"], nota:"PVEM podria competir solo; Ruth Gonzalez en duda por nepotismo" },
+  { estado:"Sinaloa", gob:"Ruben Rocha", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Imelda Castro (sen.)", otros:["Juan de Dios Gamez (pdte. mpal. Culiacan)","Enrique Inzunza (sen.)"], nota:"Foco rojo por inseguridad y gestion" },
+  { estado:"Sonora", gob:"Alfonso Durazo", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Lorenia Valles (sen.)", otros:["Javier Lamarque (pdte. mpal. Cajeme)","Heriberto Aguilar (sen.)","Karla Cordova (pdte. mpal. Guaymas)"], nota:"Durazo supervisa proceso; paridad favorece a Valles" },
+  { estado:"Tlaxcala", gob:"Lorena Cuellar", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Ana Lilia Rivera (sen.)", otros:["Josefina Rodriguez (sec. federal de Turismo)"], nota:"Rivera apuntada desde meses; sin respaldo pleno de la gobernadora" },
+  { estado:"Zacatecas", gob:"David Monreal", partido:"Morena", partidos:["Morena","PT","PVEM","PAN","PRI"], lead:"Ulises Mejia (dip. fed.)", otros:["Veronica Diaz (sen.)","Saul Monreal (sen., descartado nepotismo)"], nota:"Saul Monreal descartado por parentesco; Mejia lidera encuestas" }
+];
+
+const badgeMap = { "Morena":"b-morena","PAN":"b-pan","PRI":"b-pri","PVEM":"b-pvem","MC":"b-mc","PT":"b-pt" };
+function badge(p){ return `<span class="badge ${badgeMap[p]||'b-nva'}">${p}</span>`; }
+
+function render(rows){
+  document.getElementById("tbody").innerHTML = rows.map(d=>`
+    <tr>
+      <td class="col-estado" style="font-weight:600">${d.estado}</td>
+      <td class="col-gob" style="font-size:12px;color:#555">${d.gob}</td>
+      <td class="col-partactual">${badge(d.partido)}</td>
+      <td class="col-partidos">${d.partidos.map(badge).join("")}</td>
+      <td class="col-asp">
+        <span class="asp-lead">${d.lead}</span><br>
+        ${d.otros.length ? `<span class="asp-others">+ ${d.otros.join("; ")}</span><br>` : ""}
+        ${d.nota ? `<span class="asp-nota">${d.nota}</span>` : ""}
+      </td>
+    </tr>`).join("");
+  document.getElementById("count").textContent = `Mostrando ${rows.length} de 17 estados`;
+}
+
+function filter(){
+  const q = document.getElementById("search").value.toLowerCase();
+  const p = document.getElementById("filtPartido").value;
+  render(data.filter(d =>
+    (!q || [d.estado,d.gob,d.lead,...d.otros].join(" ").toLowerCase().includes(q)) &&
+    (!p || d.partido === p)
+  ));
+}
+
+document.getElementById("search").addEventListener("input", filter);
+document.getElementById("filtPartido").addEventListener("change", filter);
+render(data);
+</script>
+</body>
+</html>
